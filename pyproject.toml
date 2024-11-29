@@ -8,14 +8,15 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = {extras = ["standard"], version = "^0.115.5"}
+tortoise-orm = {extras = ["asyncpg"], version = "^0.22.1"}
 
 
 [tool.poetry.group.dev.dependencies]
 taskipy = "^1.14.1"
 
 [tool.taskipy.tasks]
-dev = 'fastapi dev src/api/main.py --port 8000'
-run = 'uvicorn src.api.main:app'
+dev = 'fastapi dev main.py --port 8000'
+run = 'uvicorn main:app'
 
 [build-system]
 requires = ["poetry-core"]

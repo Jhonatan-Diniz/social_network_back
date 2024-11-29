@@ -1,2 +1,3 @@
 *.pyc
 *.lock
+*.sqlite3
