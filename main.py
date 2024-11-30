@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.datalayer.set_db import set_database
+from src.settings import set_database, set_routers
 
 
 def createApp() -> FastAPI:
@@ -10,6 +10,9 @@ def createApp() -> FastAPI:
 
     # Initilize and setup the database configs
     set_database(app)
+
+    # Setup the routers paths
+    set_routers(app)
 
     return app
 
