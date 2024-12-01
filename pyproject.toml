@@ -9,6 +9,10 @@ readme = "README.md"
 python = "^3.12"
 fastapi = {extras = ["standard"], version = "^0.115.5"}
 tortoise-orm = {extras = ["asyncpg"], version = "^0.22.1"}
+pyjwt = "^2.10.1"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+pwdlib = {extras = ["argon2"], version = "^0.2.1"}
+tzdata = "^2024.2"
 
 
 [tool.poetry.group.dev.dependencies]

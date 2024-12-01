@@ -1,6 +1,11 @@
 from dataclasses import dataclass
 from src.datalayer.models.user import UserModel
 from http import HTTPStatus
+from src.api.auth import (
+    create_access_token,
+    get_password_hash,
+    verify_password
+)
 
 
 @dataclass
@@ -17,16 +22,34 @@ class UserService:
         ):
             return HTTPStatus.CONFLICT
 
+        hash_password = get_password_hash(password)
+
         user = await UserModel.create(
                 name=name,
                 email=email,
-                password=password
+                password=hash_password
         )
 
         return user
 
-    async def loginUser(self):
-        ...
+    async def loginUser(self, email, password):
+        if not await self.userExistsByEmail(email):
+            return {
+                    'msg': 'Email not found on database',
+                    'status': HTTPStatus.NOT_FOUND
+            }
+        # Get the user on database
+        user = await UserModel.get(email=email)
+
+        # Verify the passwords corresponds
+        if not verify_password(password, user.password):
+            return {
+                    'msg': 'Wrong Password',
+                    'status': HTTPStatus.NOT_FOUND
+            }
+
+        ACCESS_TOKEN = create_access_token(data={'sub': user.email})
+        return ACCESS_TOKEN
 
     async def userExistsByName(self, username) -> bool:
         # Checks the user name at database, returns a boolean ValueError
