@@ -51,6 +51,17 @@ class UserService:
         ACCESS_TOKEN = create_access_token(data={'sub': user.email})
         return ACCESS_TOKEN
 
+    async def get_user(self, data):
+        user = None
+        if await self.userExistsById(data):
+            user = await UserModel.get(id=data)
+        if await self.userExistsByName(data):
+            user = await UserModel.get(name=data)
+        if await self.userExistsByEmail(data):
+            user = await UserModel.get(email=data)
+
+        return user
+
     async def userExistsByName(self, username) -> bool:
         # Checks the user name at database, returns a boolean ValueError
         return await UserModel.exists(name=username)
