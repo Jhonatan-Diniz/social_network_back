@@ -9,7 +9,7 @@ def set_routers(app: FastAPI):
 
 
 def set_database(app: FastAPI):
-    # Make the settings to connect to database
+    # Make the settings to connect database
     # the sqlite3 database is temporary
     register_tortoise(
             app=app,

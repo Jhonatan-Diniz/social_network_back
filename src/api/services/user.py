@@ -18,6 +18,7 @@ class UserService:
 
         if (
             await self.userExistsByName(name) or
+
             await self.userExistsByEmail(email)
         ):
             return HTTPStatus.CONFLICT
@@ -65,6 +66,11 @@ class UserService:
     async def userExistsByName(self, username) -> bool:
         # Checks the user name at database, returns a boolean ValueError
         return await UserModel.exists(name=username)
+
+    async def getAllUsers(self):
+        user = await UserModel.all()
+
+        return user
 
     async def userExistsByEmail(self, email) -> bool:
         # Checks the user email at database, returns a boolean value

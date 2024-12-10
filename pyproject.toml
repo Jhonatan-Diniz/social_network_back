@@ -20,7 +20,7 @@ requests = "^2.32.3"
 taskipy = "^1.14.1"
 
 [tool.taskipy.tasks]
-dev = 'fastapi dev main.py --port 8080'
+dev = 'fastapi dev main.py --port 8087'
 run = 'uvicorn main:app'
 
 [build-system]

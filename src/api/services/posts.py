@@ -7,8 +7,12 @@ from src.datalayer.models.posts import PostsModel
 class PostService:
     async def create_post(self, msg: str, user: UserModel) -> PostsModel:
         post = await PostsModel.create(
+
             msg=msg,
-            user=user
+            user_id=user.id
         )
 
         return post
+
+    async def get_all_posts(self):
+        return await PostsModel.all()

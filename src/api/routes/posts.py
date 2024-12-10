@@ -15,10 +15,12 @@ router = APIRouter(
 
 
 @router.post("/create_post")
-async def register(
+async def create_post(
         request: PostCreate,
         current_user: Annotated[UserModel, Depends(get_current_user)]
         ):
+    print(current_user)
+    print(request)
     post_service = PostService()
     post = await post_service.create_post(
             user=current_user,
@@ -26,3 +28,10 @@ async def register(
             )
 
     return {'Post': post}
+
+
+@router.get('/get_posts')
+async def get_posts():
+    post_service = PostService()
+    posts = await post_service.get_all_posts()
+    return posts

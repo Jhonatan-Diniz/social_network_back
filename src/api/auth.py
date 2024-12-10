@@ -49,7 +49,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         if username is None:
             return 'Credentials Invalid'
     except InvalidTokenError:
-            return 'Credentials Invalid'
+        return 'Credentials Invalid'
 
     # If the username dont exist, so returns None
     user = await UserModel.get(email=username)
