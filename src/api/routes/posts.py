@@ -4,6 +4,7 @@ from src.api.auth import get_current_user
 from src.datalayer.models.user import UserModel
 from src.api.services.posts import PostService
 from src.api.schemas.posts import (
+    PostComment,
     PostCreate,
 )
 
@@ -19,8 +20,6 @@ async def create_post(
         request: PostCreate,
         current_user: Annotated[UserModel, Depends(get_current_user)]
         ):
-    print(current_user)
-    print(request)
     post_service = PostService()
     post = await post_service.create_post(
             user=current_user,
@@ -28,6 +27,37 @@ async def create_post(
             )
 
     return {'Post': post}
+
+
+@router.post('/{post_id}/like')
+async def like(
+        post_id: int,
+        current_user: Annotated[UserModel, Depends(get_current_user)]
+        ):
+    post_service = PostService()
+    likes_post = await post_service.like_post(
+            post_id=post_id,
+            user_id=current_user.id
+    )
+
+    return likes_post
+
+
+@router.post('/{post_id}/comment')
+async def comment(
+        post_id: int,
+        comment_msg: PostComment,
+        current_user: Annotated[UserModel, Depends(get_current_user)]
+        ):
+    post_service = PostService()
+
+    comment_post = await post_service.comment_post(
+        user_id=current_user.id,
+        post_id=post_id,
+        message=comment_msg.message
+    )
+
+    return comment_post
 
 
 @router.get('/get_posts')

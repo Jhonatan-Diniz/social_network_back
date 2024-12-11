@@ -10,3 +10,28 @@ class PostsModel(Model):
             'models.UserModel',
             related_name='user_posts'
             )
+    likes = fields.IntField(default=0)
+    comments = fields.IntField(default=0)
+
+
+class LikeModel(Model):
+    user = fields.ForeignKeyField(
+            'models.UserModel',
+            related_name='user_likes'
+    )
+    post = fields.ForeignKeyField(
+            'models.PostsModel',
+            related_name='posts_likes'
+    )
+
+
+class CommentModel(Model):
+    user = fields.ForeignKeyField(
+            'models.UserModel',
+            related_name='user_comment'
+            )
+    post = fields.ForeignKeyField(
+            'models.PostsModel',
+            related_name='post_comment'
+            )
+    content = fields.TextField()
