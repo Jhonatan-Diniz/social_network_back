@@ -15,7 +15,7 @@ def set_database(app: FastAPI):
             app=app,
             config={
                 'connections': {
-                    'default': 'sqlite://db.sqlite3'
+                    'default': 'postgres:///db_socialnetwork'
                 },
                 'apps': {
                     'models': {
