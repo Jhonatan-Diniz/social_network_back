@@ -11,4 +11,3 @@ RUN poetry install
 EXPOSE 8000
 
 CMD ["task", "run"]
-
