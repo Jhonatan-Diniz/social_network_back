@@ -60,6 +60,18 @@ async def comment(
     return comment_post
 
 
+@router.get('/{user_id}/')
+async def get_posts_from_user(
+        user_id: int
+        ):
+    post_service = PostService()
+
+    posts_list = await post_service.get_posts_by_user(
+            user_id=user_id
+            )
+    return posts_list
+
+
 @router.get('/get_posts')
 async def get_posts():
     post_service = PostService()

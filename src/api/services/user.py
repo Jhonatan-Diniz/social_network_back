@@ -63,14 +63,13 @@ class UserService:
 
         return user
 
+    async def getAllUsers(self):
+        user = await UserModel.all()
+        return user
+
     async def userExistsByName(self, username) -> bool:
         # Checks the user name at database, returns a boolean ValueError
         return await UserModel.exists(name=username)
-
-    async def getAllUsers(self):
-        user = await UserModel.all()
-
-        return user
 
     async def userExistsByEmail(self, email) -> bool:
         # Checks the user email at database, returns a boolean value

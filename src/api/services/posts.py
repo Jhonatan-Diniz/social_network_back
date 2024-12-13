@@ -55,6 +55,18 @@ class PostService:
 
         return {'comments': post.comments}
 
+    async def get_posts_by_user(self, user_id):
+        try:
+            return await PostsModel.filter(user_id=user_id)
+        except DoesNotExist as err:
+            raise err
+
+    async def get_likes_by_user(self, user_id):
+        try:
+            return await LikeModel.filter(user_id=user_id)
+        except DoesNotExist as err:
+            raise err
+
     async def get_post(self, post_id):
         try:
             return await PostsModel.get(id=post_id)
