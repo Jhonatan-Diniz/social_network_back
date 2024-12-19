@@ -10,3 +10,7 @@ class RegisterUser(BaseModel):
 class LoginUser(BaseModel):
     email: str
     password: str
+
+
+class ImageUser(BaseModel):
+    image: str

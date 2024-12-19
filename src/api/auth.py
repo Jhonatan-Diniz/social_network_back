@@ -10,7 +10,6 @@ import jwt
 # from src.api.services.user import UserService
 from src.datalayer.models.user import UserModel
 
-
 SECRET_KEY = ''
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

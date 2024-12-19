@@ -14,11 +14,11 @@ class UserService:
             self,
             name: str,
             email: str,
-            password: str) -> HTTPStatus | UserModel:
-
+            password: str
+            ) -> HTTPStatus | UserModel:
         if (
-            await self.userExistsByName(name) or
-
+            await self.userExistsByName(name)
+            or
             await self.userExistsByEmail(email)
         ):
             return HTTPStatus.CONFLICT
@@ -33,7 +33,7 @@ class UserService:
 
         return user
 
-    async def loginUser(self, email, password):
+    async def loginUser(self, email: str, password: str) -> dict:
         if not await self.userExistsByEmail(email):
             return {
                     'msg': 'Email not found on database',
@@ -50,7 +50,19 @@ class UserService:
             }
 
         ACCESS_TOKEN = create_access_token(data={'sub': user.email})
-        return ACCESS_TOKEN
+        user_info = {'access_token': ACCESS_TOKEN,
+                     'username': user.name,
+                     'id': user.id}
+
+        return user_info
+
+    async def validateForm(self, data) -> bool:
+        if data.email.find('@') == -1:
+            return False
+
+        if data.email[data.email.index('@'):] != '@gmail.com':
+            return False
+        return True
 
     async def get_user(self, data):
         user = None
@@ -78,3 +90,9 @@ class UserService:
     async def userExistsById(self, user_id) -> bool:
         # Checks the user id at database, returns a boolean value
         return await UserModel.exists(id=user_id)
+
+    async def set_image(self, data):
+        user = await UserModel.get(id=data['user'].id)
+
+        user.image = data.image
+        await user.save()

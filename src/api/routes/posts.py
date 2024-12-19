@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from src.api.auth import get_current_user
@@ -21,6 +22,12 @@ async def create_post(
         current_user: Annotated[UserModel, Depends(get_current_user)]
         ):
     post_service = PostService()
+    if current_user == 'Credentials Invalid':
+        return {
+            'status': HTTPStatus.UNAUTHORIZED,
+            'msg': 'Credentials Invalid'
+        }
+
     post = await post_service.create_post(
             user=current_user,
             msg=request.message
@@ -69,6 +76,7 @@ async def get_posts_from_user(
     posts_list = await post_service.get_posts_by_user(
             user_id=user_id
             )
+
     return posts_list
 
 

@@ -1,8 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from http import HTTPStatus
 from src.api.services.user import UserService
+from typing import Annotated
+from src.api.auth import get_current_user
+from src.datalayer.models.user import UserModel
 from src.api.schemas.user import (
     RegisterUser,
-    LoginUser
+    LoginUser,
+    ImageUser
 )
 
 router = APIRouter(
@@ -14,8 +19,13 @@ router = APIRouter(
 
 @router.post("/register")
 async def register(request: RegisterUser):
-    print(request)
     user_service = UserService()
+    if not await user_service.validateForm(request):
+        return {
+                'status': HTTPStatus.NOT_ACCEPTABLE,
+                'msg': 'The email is not valid'
+        }
+
     user = await user_service.registerUser(
         name=request.name,
         email=request.email,
@@ -27,12 +37,12 @@ async def register(request: RegisterUser):
 @router.post('/login')
 async def login(request: LoginUser):
     user_service = UserService()
-    access_token = await user_service.loginUser(
+    user_infos = await user_service.loginUser(
             email=request.email,
             password=request.password
             )
 
-    return access_token
+    return user_infos
 
 
 @router.get('/get_all')
@@ -41,3 +51,36 @@ async def getAll():
     all_users = await user_service.getAllUsers()
 
     return all_users
+
+
+@router.get("/{user_id}")
+async def getUser(user_id: int):
+    user_service = UserService()
+    user = await user_service.get_user(user_id)
+    if user is None:
+        return {
+                'status': HTTPStatus.NOT_FOUND,
+                'msg': 'This user dont exist!'
+                }
+
+    user_data = {
+            'user_id': user.id,
+            'name': user.name,
+            'email': user.email
+            }
+
+    return user_data
+
+
+@router.post("/set_image")
+async def set_image(
+        request: ImageUser,
+        current_user: Annotated[UserModel, Depends(get_current_user)]
+        ):
+    user_service = UserService()
+    data = {
+        'user': current_user,
+        'image': request.image
+    }
+    set_image = await user_service.set_image(data)
+    return set_image

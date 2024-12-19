@@ -8,3 +8,4 @@ class UserModel(Model):
     email = fields.CharField(max_length=50)
     password = fields.TextField()
     created = fields.DatetimeField(auto_now_add=True)
+    image = fields.BinaryField(null=True)
